@@ -9,19 +9,22 @@ const fakeBooks = [
   }
 ];
 
-/* Suplantando la clase MongoLib */
-const MongoLibStub = {
-  getAll: jest.fn().mockResolvedValue(fakeBooks),
-  create: jest.fn().mockImplementation((collection, book) => ({
-    _id: 'abc123',
-    ...book
-  }))
-};
-
 /* Llamando a mock */
 jest.mock('../lib/mongo.lib', () =>
-  jest.fn().mockImplementation(() => MongoLibStub)
+  jest.fn().mockImplementation(() => ({
+    getAll: jest.fn().mockResolvedValue([
+      {
+        _id: 1,
+        name: 'Harry Potter'
+      }
+    ]),
+    create: jest.fn().mockImplementation((collection, book) => ({
+      _id: 'abc123',
+      ...book
+    }))
+  }))
 );
+
 
 describe('Test for BooksService', () => {
   /*Crear instancia del servicio*/
