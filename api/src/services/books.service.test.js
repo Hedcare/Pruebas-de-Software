@@ -1,21 +1,31 @@
 /*Nuestro objeto de pruebas*/
 const BooksService = require('./books.service');
 
-/*Suplantando la clase MongoLib
-const MongoLibStub = {
-  getAll: () =>[...fakeBooks]
-};
-
-Datos simulados
-const fakeBooks =[
-{
-  _id: 1,
-  name: 'Harry Potter'
-}
+/* Datos simulados */
+const fakeBooks = [
+  {
+    _id: 1,
+    name: 'Harry Potter'
+  }
 ];
-Llamando a mock
-jest.mock('../lib/mongo.lib',() =>jest.fn().mockImplementation(() => MongoLibStub));
-*/
+
+/* Llamando a mock */
+jest.mock('../lib/mongo.lib', () =>
+  jest.fn().mockImplementation(() => ({
+    getAll: jest.fn().mockResolvedValue([
+      {
+        _id: 1,
+        name: 'Harry Potter'
+      }
+    ]),
+    create: jest.fn().mockImplementation((collection, book) => ({
+      _id: 'abc123',
+      ...book
+    }))
+  }))
+);
+
+
 describe('Test for BooksService', () => {
   /*Crear instancia del servicio*/
   let service;
