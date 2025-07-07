@@ -1,0 +1,32 @@
+name: API CI
+
+on:
+  push:
+    paths:
+      - "./api/**"
+      - ".github/workflows/api-ci.yml"
+
+jobs:
+  unit-test:
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        working-directory: ./api
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 22
+          cache: "npm"
+          cache-dependency-path: ./api/package-lock.json
+
+      - name: Install dependecies
+        run: npm ci
+
+      - name: run unit test
+        run: run unit test
